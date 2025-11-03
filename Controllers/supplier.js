@@ -20,13 +20,14 @@ exports.createSupplier = async (req, res) => {
 
 exports.deleteSupplier = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            await supplierSchema.findByIdAndDelete(req.params.id);
-            res.status(200).json({ message: 'Supplier deleted successfully' });
+        // Find supplier by code since that's what's used in the route
+        const supplier = await supplierSchema.findOne({ code: req.params.code });
+        if (!supplier) {
+            return res.status(404).json({ message: 'Supplier not found' });
         }
-        else {
-            res.status(403).json({ message: 'you dont have permission for delete' })
-        }
+        
+        await supplierSchema.findByIdAndDelete(supplier._id);
+        res.status(200).json({ message: 'Supplier deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -34,15 +35,19 @@ exports.deleteSupplier = async (req, res) => {
 
 exports.updateSupplier = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            const updatedSupplier = await supplierSchema.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            res.status(200).json({ message: 'Supplier updated successfully', data: updatedSupplier });
+        const { code } = req.params;
+        const updateData = req.body;
+        
+        // Find the existing supplier by code
+        const existingSupplier = await supplierSchema.findOne({ code });
+        if (!existingSupplier) {
+            return res.status(404).json({ message: 'Supplier not found' });
         }
-        else {
-            res.status(403).json({ message: 'you dont have permission for update' })
-        }
+        
+        // Update the supplier using the MongoDB _id
+        const updatedSupplier = await supplierSchema.findByIdAndUpdate(existingSupplier._id, updateData, { new: true });
+        res.status(200).json({ message: 'Supplier updated successfully', data: updatedSupplier });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-
 }

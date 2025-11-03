@@ -20,14 +20,9 @@ exports.createScrap = async (req, res) => {
 
 exports.deleteScrap = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            // Use code instead of id to match the frontend expectation
-            await scrapSchema.findOneAndDelete({ code: req.params.code });
-            res.status(200).json({ message: 'Scrap deleted successfully' });
-        }
-        else {
-            res.status(403).json({ message: 'you dont have permission for delete' })
-        }
+        // Use code instead of id to match the frontend expectation
+        await scrapSchema.findOneAndDelete({ code: req.params.code });
+        res.status(200).json({ message: 'Scrap deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -35,18 +30,13 @@ exports.deleteScrap = async (req, res) => {
 
 exports.updateScrap = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            // Use code instead of id to match the frontend expectation
-            const updatedScrap = await scrapSchema.findOneAndUpdate(
-                { code: req.params.code },
-                req.body,
-                { new: true }
-            );
-            res.status(200).json({ message: 'Scrap updated successfully', data: updatedScrap });
-        }
-        else {
-            res.status(403).json({ message: 'you dont have permission for update' })
-        }
+        // Use code instead of id to match the frontend expectation
+        const updatedScrap = await scrapSchema.findOneAndUpdate(
+            { code: req.params.code },
+            req.body,
+            { new: true }
+        );
+        res.status(200).json({ message: 'Scrap updated successfully', data: updatedScrap });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -20,13 +20,9 @@ exports.createWorkerSupervisor = async (req, res) => {
 
 exports.deleteWorkerSupervisor = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            await workerSupervisorSchema.findByIdAndDelete(req.params.id);
-            res.status(200).json({ message: 'Worker Supervisor deleted successfully' });
-        }
-        else {
-            res.status(403).json({ message: 'you dont have permission for delete' })
-        }
+        await workerSupervisorSchema.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Worker Supervisor deleted successfully' });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -34,13 +30,8 @@ exports.deleteWorkerSupervisor = async (req, res) => {
 
 exports.updateWorkerSupervisor = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            const updatedWorkerSupervisor = await workerSupervisorSchema.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            res.status(200).json({ message: 'Worker Supervisor updated successfully', data: updatedWorkerSupervisor });
-        }
-        else {
-            res.status(403).json({ message: 'you dont have permission for update' });
-        }
+        const updatedWorkerSupervisor = await workerSupervisorSchema.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json({ message: 'Worker Supervisor updated successfully', data: updatedWorkerSupervisor });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

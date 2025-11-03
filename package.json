@@ -1,23 +1,35 @@
 {
-  "name": "test_1",
+  "name": "production-api-server",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+  "description": "Production-ready Node.js/Express backend with MongoDB",
+  "main": "app.js",
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
   },
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "rest-api",
+    "production"
+  ],
+  "author": "Your Name",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "github": "^14.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
