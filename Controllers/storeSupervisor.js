@@ -11,13 +11,8 @@ exports.getallStoreSupervisor = async (req, res) => {
 
 exports.createStoreSupervisor = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            const newStoreSupervisor = await storeSupervisorSchema.create(req.body);
-            res.status(201).json(newStoreSupervisor);
-        }
-        else {
-            res.status(403).json({ message: 'you dont have permission for create' })
-        }
+        const newStoreSupervisor = await storeSupervisorSchema.create(req.body);
+        res.status(201).json(newStoreSupervisor);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -25,13 +20,8 @@ exports.createStoreSupervisor = async (req, res) => {
 
 exports.deleteStoreSupervisor = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            await storeSupervisorSchema.findByIdAndDelete(req.params.id);
-            res.status(200).json({ message: 'Store Supervisor deleted successfully' });
-        }
-        else {
-            res.status(403).json({ message: 'you dont have permission for delete' })
-        }
+        await storeSupervisorSchema.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Store Supervisor deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

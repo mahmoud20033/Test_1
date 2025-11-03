@@ -1,14 +1,43 @@
 # Environment variables
 .env
+.env.local
+.env.*.local
 
-# Dependencies
+# Node modules
 node_modules/
-
-# Logs
-logs
-*.log
-npm-debug.log*
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 
 # OS files
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+
+# Dist folder (will be built locally)
+dist/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# IDE
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+
+# Private keys
+*.pem
+*.key
+*.jks
+
+# Build output
+build/
+out/

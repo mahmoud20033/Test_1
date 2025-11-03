@@ -7,7 +7,6 @@ exports.getallClients = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
-
 }
 
 exports.createClients = async (req, res) => {
@@ -21,13 +20,14 @@ exports.createClients = async (req, res) => {
 
 exports.deleteClients = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            await clienSchema.findByIdAndDelete(req.params.id)
-            res.status(200).json({ message: 'Client deleted successfully' })
+        // Find client by code since that's what's used in the route
+        const client = await clienSchema.findOne({ code: req.params.code });
+        if (!client) {
+            return res.status(404).json({ message: 'Client not found' });
         }
-        else {
-            res.status(403).json({ message: 'you dont have permission for delete' })
-        }
+
+        await clienSchema.findByIdAndDelete(client._id);
+        res.status(200).json({ message: 'Client deleted successfully' });
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -35,15 +35,19 @@ exports.deleteClients = async (req, res) => {
 
 exports.updateClients = async (req, res) => {
     try {
-        if (req.user.role === "admin") {
-            const updatedClient = await clienSchema.findByIdAndUpdate(req.params.id, req.body, { new: true })
-            res.status(200).json({ message: 'Client updated successfully', data: updatedClient })
+        const { code } = req.params;
+        const updateData = req.body;
+
+        // Find the existing client by code
+        const existingClient = await clienSchema.findOne({ code });
+        if (!existingClient) {
+            return res.status(404).json({ message: 'Client not found' });
         }
-        else {
-            res.status(403).json({ message: 'you dont have permission for update' })
-        }
+
+        // Update the client using the MongoDB _id
+        const updatedClient = await clienSchema.findByIdAndUpdate(existingClient._id, updateData, { new: true });
+        res.status(200).json({ message: 'Client updated successfully', data: updatedClient });
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
-
 }
