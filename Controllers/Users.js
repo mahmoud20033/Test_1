@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             password: hashPassword,
-            role: req.body.role || 'user',
+            role: req.body.role || 'user', // Default to 'user' if no role specified
             permissions: req.body.permissions || {
                 Manager: false,
                 Dashboard: false,
