@@ -4,13 +4,27 @@ const jwt = require('jsonwebtoken')
 
 exports.register = async (req, res) => {
     try {
-        //hash password
+        // Validate required fields
+        if (!req.body.username || !req.body.email || !req.body.password) {
+            return res.status(400).json({ message: 'username, email, and password are required' })
+        }
+
+        // Check if user already exists (email or username)
+        const existingUser = await userSchema.findOne({
+            $or: [{ email: req.body.email }, { username: req.body.username }]
+        })
+
+        if (existingUser) {
+            return res.status(409).json({ message: 'User with this email or username already exists' })
+        }
+
+        // Hash password
         const hashPassword = await bcrypt.hash(req.body.password, 10)
         const newUser = new userSchema({
             username: req.body.username,
             email: req.body.email,
             password: hashPassword,
-            role: req.body.role || 'user', // Default to 'user' if no role specified
+            role: req.body.role || 'user',
             permissions: req.body.permissions || {
                 Manager: false,
                 Dashboard: false,
@@ -24,8 +38,9 @@ exports.register = async (req, res) => {
             }
         })
         let createUser = await newUser.save()
-        res.json({ message: 'user created successfully', user: createUser })
+        res.status(201).json({ message: 'user created successfully', user: createUser })
     } catch (error) {
+        console.error('Registration error:', error.message);
         res.status(400).json({ message: 'error in creating user', error: error.message })
     }
 }

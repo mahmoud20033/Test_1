@@ -61,5 +61,4 @@ All API endpoints are prefixed with `/api`:
 
 ## License
 
-This project is licensed under the ISC License."# Full-Stack" 
-"# Full-Stack" 
+This project is licensed under the ISC License.
