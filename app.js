@@ -23,12 +23,6 @@ const corsOptions = {
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
     credentials: true
 }
-app.use(express.static(path.join(__dirname, "dist")));
-
-app.get(["/", "/:path"], (req, res) => {
-    res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 
@@ -59,15 +53,14 @@ app.use('/api', userRouter)
 app.use('/api', workerRouter)
 app.use('/api', managerRouter)
 
-// Add a root route for testing
-app.get('/', (req, res) => {
-    res.json({ message: 'Backend API is running' });
+// Serve static files and SPA fallback AFTER API routes
+app.use(express.static(path.join(__dirname, "dist")));
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Example app listening on port ${port}`)
     console.log(`Local: http://localhost:${port}`)
     console.log(`Network: http://<your-ip-address>:${port}`)
-
-
 })
